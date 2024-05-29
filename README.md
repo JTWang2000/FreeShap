@@ -1,5 +1,5 @@
-# FreeShap
-Efficient fine-tuning-free approximation of the Shapley value (FreeShap) for instance attribution based on the  neural tangent kernel. 
+# FreeShap: Helpful or Harmful Data? Fine-tuning-free Shapley Attribution for Explaining Language Model Predictions [ICML 2024]
+This is the official implementation of the ICML 2024 paper "Helpful or Harmful Data? Fine-tuning-free Shapley Attribution for Explaining Language Model Predictions"
 
 # Prepare the conda environment
 
@@ -46,3 +46,14 @@ bash ntk_shapley.sh "sst2" "0" "5000" "True" "{PATH}"
 The running result will be stored at `{PATH}` folder.
 
 We have also provided a kernel in [Drive](https://drive.google.com/drive/folders/1BCqdtBO_jderYfjCEYVQOo_ADaKxvzlo?usp=sharing). Can save the kernel in the `{PATH}` to play with explanations. 
+
+# BibTeX
+
+```
+@inproceedings{wang2013helpful,
+        title={Helpful or Harmful Data? Fine-tuning-free Shapley Attribution for Explaining Language Model Predictions},
+        author={Jingtan Wang, Xiaoqiang Lin, Rui Qiao, Chuan-Sheng Foo, Bryan Kian Hsiang Low},
+        year={2024},
+        booktitle={Proc. ICML}
+}
+```
