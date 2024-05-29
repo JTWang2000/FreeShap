@@ -1,0 +1,38 @@
+disk_reader: !EasyReader &id_disk_reader
+  args:
+    dataset_name: mrpc
+
+dataset: !ListDataset &id_dataset
+  args:
+    device: cuda:0
+    batchsize: 2
+    model_string: meta-llama/Llama-2-7b-hf
+    seq_len: 128
+  data_loader: *id_disk_reader
+  prompt: True
+  mapping: "{'0':'<No','1':'<Yes'}"
+  template: "*<s>**sent_0*Question*:*+sentl_1*Yes_or_NO*?*mask*sep+*"
+  first_sent_limit: 80
+  other_sent_limit: 40
+
+
+probe_com: !PromptLLMProbe &id_probe_com
+  device: cuda:0
+  seed: 2023
+  model_name: meta-llama/Llama-2-7b-hf
+  num_labels: 2
+
+regimen: !PromptProbeRegimen &id_regimen
+  args:
+    device: cuda:0
+  max_epochs: 5
+  lr: 0.00001
+  save_best: False
+  optimizer_choice: adam
+
+
+dshap_com: !Data_Shapley
+  dataset: *id_dataset
+  train_process: *id_regimen
+  probe_model: *id_probe_com
+  num_metric: 2

@@ -1,0 +1,37 @@
+disk_reader: !EasyReader &id_disk_reader
+  args:
+    dataset_name: sst2
+    data_poison: True
+
+dataset: !ListDataset &id_dataset
+  args:
+    device: cuda:0
+    batchsize: 4
+    model_string: meta-llama/Llama-2-7b-hf
+    seq_len: 64
+  data_loader: *id_disk_reader
+  prompt: True
+  mapping: "{'0':'<terrible','1':'<great'}"
+  template: "*<s>**sent_0*It_was*mask*.*sep+*"
+  first_sent_limit: 60
+
+probe_com: !PromptLLMProbe &id_probe_com
+  device: cuda:0
+  seed: 2023
+  model_name: meta-llama/Llama-2-7b-hf
+  num_labels: 2
+
+regimen: !PromptProbeRegimen &id_regimen
+  args:
+    device: cuda:0
+  max_epochs: 5
+  lr: 0.00001
+  save_best: False
+  optimizer_choice: adam
+
+
+dshap_com: !Data_Shapley
+  dataset: *id_dataset
+  train_process: *id_regimen
+  probe_model: *id_probe_com
+  num_metric: 2

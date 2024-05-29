@@ -1,0 +1,41 @@
+disk_reader: !EasyReader &id_disk_reader
+  args:
+    dataset_name: rte
+    data_poison: True
+
+dataset: !ListDataset &id_dataset
+  args:
+    device: cuda:0
+    batchsize: 16
+#    model_string: roberta-base # bert-base-uncased
+    model_string: bert-base-uncased
+    seq_len: 256
+  data_loader: *id_disk_reader
+  prompt: True
+  mapping: "{'entailment':'Yes', 'not_entailment':'No'}"
+  template: "*cls**sent-_0*?*mask*,*+sentl_1**sep+*"
+  first_sent_limit: 240
+
+probe_com: !PromptFinetuneProbe &id_probe_com
+  args:
+    device: cuda:0
+    seed: 2023
+#    model_string: roberta-base # bert-base-uncased
+    model_string: bert-base-uncased
+  freeze_layers: 8
+  num_labels: 2
+
+regimen: !PromptProbeRegimen &id_regimen
+  args:
+    device: cuda:0
+  max_epochs: 10
+  lr: 0.00001
+  save_best: False
+  optimizer_choice: adam
+
+
+dshap_com: !Data_Shapley
+  dataset: *id_dataset
+  train_process: *id_regimen
+  probe_model: *id_probe_com
+  num_metric: 2
