@@ -50,7 +50,7 @@ We have also provided a kernel in [Drive](https://drive.google.com/drive/folders
 # BibTeX
 
 ```
-@inproceedings{wang2013helpful,
+@inproceedings{wang2024helpful,
         title={Helpful or Harmful Data? Fine-tuning-free Shapley Attribution for Explaining Language Model Predictions},
         author={Jingtan Wang, Xiaoqiang Lin, Rui Qiao, Chuan-Sheng Foo, Bryan Kian Hsiang Low},
         year={2024},
